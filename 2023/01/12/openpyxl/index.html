@@ -18,20 +18,20 @@
   <meta name="author" content="binru.wang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="源码编译三部曲">
+    <meta name="description" content="python操作excel">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android源码编译">
-<meta property="og:url" content="http://example.com/2023/01/10/Android%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/index.html">
+<meta property="og:title" content="openpyxl">
+<meta property="og:url" content="http://example.com/2023/01/12/openpyxl/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="源码编译三部曲">
+<meta property="og:description" content="python操作excel">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/img/img_1.png">
-<meta property="article:published_time" content="2023-01-10T11:19:21.500Z">
-<meta property="article:modified_time" content="2023-01-10T12:52:41.509Z">
+<meta property="og:image" content="http://example.com/img/openpyxl.jpeg">
+<meta property="article:published_time" content="2023-01-12T12:33:57.623Z">
+<meta property="article:modified_time" content="2023-01-12T12:47:37.055Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/img/img_1.png">
+<meta name="twitter:image" content="http://example.com/img/openpyxl.jpeg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -39,7 +39,7 @@
   
     <link rel="icon" href="/img/favicon.svg"> <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.svg"> <title>binru-blog</title>
   
-  <title>Android源码编译 - Hexo</title>
+  <title>openpyxl - Hexo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -205,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle">Android源码编译</span>
+            <span id="subtitle">openpyxl</span>
           
         </div>
 
@@ -221,8 +221,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-01-10 19:19" pubdate>
-          星期二, 一月 10日 2023, 7:19 晚上
+        <time datetime="2023-01-12 20:33" pubdate>
+          星期四, 一月 12日 2023, 8:33 晚上
         </time>
       </span>
     
@@ -234,7 +234,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.9k 字
+          2.7k 字
         
       </span>
     
@@ -246,7 +246,7 @@
         
         
           <!-- compatible with older versions-->
-          16 分钟
+          23 分钟
         
       </span>
     
@@ -292,83 +292,44 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Android源码编译</h1>
+            <h1 style="display: none">openpyxl</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h1><p>不再赘述</p>
-<h1 id="构建编译环境"><a href="#构建编译环境" class="headerlink" title="构建编译环境"></a>构建编译环境</h1><p>不再赘述</p>
-<h1 id="编译三部曲"><a href="#编译三部曲" class="headerlink" title="编译三部曲"></a>编译三部曲</h1><ol>
-<li><p>初始化编译环境，该命令执行成功后会引入其他脚本，比如接下来要用到的<code>lunch</code>命令。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br></code></pre></td></tr></table></figure></li>
-<li><p><code>lunch</code>指定编译目标，编译目标就是生成的镜像要运行在什么样的设备上，这里我们设置编译目标为<code>aosp_arm64-eng</code></p>
-<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">lunch</span> aosp_arm64-eng<br></code></pre></td></tr></table></figure>
+                <h1 id="创建工作簿"><a href="#创建工作簿" class="headerlink" title="创建工作簿"></a>创建工作簿</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> openpyxl <span class="hljs-keyword">import</span> Workbook<br>wb = Workbook()<br></code></pre></td></tr></table></figure>
 
-<p>编译目标的格式：<strong>BUILD-BUILDTTYPE</strong>，比如<code>aosp_arm64-eng</code>的<strong>BUILD</strong>为<code>aosp_arm</code>，<strong>BUILDTTYPE</strong>为<code>eng</code></p>
-<p><em><strong>什么是BUILD</strong></em></p>
-<div class="note note-success">
-            <p>BUILD指的是特定功能的组合的特定名称,即表示编译出的镜像可以运行在什么环境.其中,aosp(Android Open Source Project)代表Android开源项目;arm表示系统是运行在arm架构的处理器上,arm64则是指64位arm架构。</p>
-          </div>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ws = wb.active<br></code></pre></td></tr></table></figure>
 
+<p>默认设置为 0。除非您修改它的值，否则您将始终使用此方法获取<em><strong>第一个工作表</strong></em>。</p>
+<h1 id="创建新工作表"><a href="#创建新工作表" class="headerlink" title="创建新工作表"></a>创建新工作表</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">ws1 = wb.create_sheet(<span class="hljs-string">&quot;Mysheet&quot;</span>) <span class="hljs-comment"># insert at the end (default)</span><br><span class="hljs-comment"># or</span><br>ws2 = wb.create_sheet(<span class="hljs-string">&quot;Mysheet&quot;</span>, <span class="hljs-number">0</span>) <span class="hljs-comment"># insert at first position</span><br><span class="hljs-comment"># or</span><br>ws3 = wb.create_sheet(<span class="hljs-string">&quot;Mysheet&quot;</span>, -<span class="hljs-number">1</span>) <span class="hljs-comment"># insert at the penultimate position</span><br></code></pre></td></tr></table></figure>
 
-<p><em><strong>什么是BUILDTYPE</strong></em></p>
-<div class="note note-success">
-            <p>BUILD TYPE则指的是编译类型,通常有三种:<br>user: 代表这是编译出的系统镜像是可以用来正式发布到市场的版本,其权限是被限制的(如,没有root、debug权限）。<br>userdebug: 在user版本的基础上开放了root权限和debug权限。<br>eng: 代表engineer,也就是所谓的开发工程师的版本,拥有最大的权限(root等),此外还附带了许多debug工具。</p>
-          </div></li>
-<li><p>通过make指令进行代码编译,该指令通过<code>-j</code>参数来设置参与编译的线程数量,以提高编译速度.比如这里我们设置8个线程同时编译:</p>
-<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-built_in">make</span> -j8<br></code></pre></td></tr></table></figure>
+<h1 id="更改sheet名称"><a href="#更改sheet名称" class="headerlink" title="更改sheet名称"></a>更改sheet名称</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ws.title = <span class="hljs-string">&quot;New Title&quot;</span><br></code></pre></td></tr></table></figure>
 
-<p>需要注意的是,参与编译的线程并不是越多越好,通常是根据你机器cup总逻辑核数来确定</p>
-<p>输入top命令，然后按1，可以查看CPU所有逻辑核的负载。</p>
-<p>逻辑cpu=CPU个数×每颗核数  当他相等的时候说明没有使用超线程</p>
-<p><code>cat /proc/cpuinfo | grep &quot;processor&quot; |wc -l  </code>   查看总逻辑核数</p>
-<p><code>cat /proc/cpuinfo | grep &quot;cpu cores&quot; | uniq </code>  查看单个cpu的物理核数</p>
-<p><code>cat /proc/cpuinfo | grep &quot;physical id&quot; | uniq | wc -l</code>   查看机器一共几个cpu</p>
-</li>
-</ol>
-<h1 id="模块编译"><a href="#模块编译" class="headerlink" title="模块编译"></a>模块编译</h1><p>除了通过make命令编译整个android源码外，Google也为我们提供了相应的命令来支持单独模块的编译。</p>
-<p>编译环境初始化(即执行<code>source build/envsetup.sh</code>)之后,我们可以得到一些有用的指令,除了上边用到的<code>lunch</code>,还有以下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">- croot: Changes directory to the top of the tree.<br>- m: Makes from the top of the tree.<br>- mm: Builds all of the modules <span class="hljs-keyword">in</span> the current directory.<br>- mmm: Builds all of the modules <span class="hljs-keyword">in</span> the supplied directories.<br>- cgrep: Greps on all <span class="hljs-built_in">local</span> C/C++ files.<br>- jgrep: Greps on all <span class="hljs-built_in">local</span> Java files.<br>- resgrep: Greps on all <span class="hljs-built_in">local</span> res/*.xml files.<br>- godir: Go to the directory containing a file.<br></code></pre></td></tr></table></figure>
+<h1 id="更改sheet背景颜色"><a href="#更改sheet背景颜色" class="headerlink" title="更改sheet背景颜色"></a>更改sheet背景颜色</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">ws.sheet_properties.tabColor = <span class="hljs-string">&quot;1072BA&quot;</span><br></code></pre></td></tr></table></figure>
 
-<p>其中mmm指令就是用来编译指定目录。通常来说，每个目录只包含一个模块。比如这里我们要编译Launcher2模块，执行指令：</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile">mmm packages/apps/Launcher2/<br></code></pre></td></tr></table></figure>
+<h1 id="修改单元格内容"><a href="#修改单元格内容" class="headerlink" title="修改单元格内容"></a>修改单元格内容</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">ws[<span class="hljs-string">&#x27;A4&#x27;</span>] = <span class="hljs-number">4</span><br><span class="hljs-comment"># or</span><br>d = ws.cell(row=<span class="hljs-number">4</span>, column=<span class="hljs-number">2</span>, value=<span class="hljs-number">10</span>)<br></code></pre></td></tr></table></figure>
 
-<p>编译完成后，可以在<code>out/target/product/gereric/system/app</code>中看到编译的Launcher2.apk文件了。</p>
-<div class="note note-success">
-            <p>编译好指定模块后，借助adb install命令直接将生成的apk文件安装到设备上即可。</p>
-          </div>
+<h1 id="访问多个单元格"><a href="#访问多个单元格" class="headerlink" title="访问多个单元格"></a>访问多个单元格</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python">cell_range = ws[<span class="hljs-string">&#x27;A1&#x27;</span>:<span class="hljs-string">&#x27;C2&#x27;</span>]<br><span class="hljs-comment"># or</span><br><span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> ws.iter_rows(min_row=<span class="hljs-number">1</span>, max_col=<span class="hljs-number">3</span>, max_row=<span class="hljs-number">2</span>):<br>    <span class="hljs-keyword">for</span> cell <span class="hljs-keyword">in</span> row:<br>        <span class="hljs-built_in">print</span>(cell)<br>&lt;Cell Sheet1.A1&gt;<br>&lt;Cell Sheet1.B1&gt;<br>&lt;Cell Sheet1.C1&gt;<br>&lt;Cell Sheet1.A2&gt;<br>&lt;Cell Sheet1.B2&gt;<br>&lt;Cell Sheet1.C2&gt;<br><span class="hljs-comment"># or</span><br><span class="hljs-keyword">for</span> col <span class="hljs-keyword">in</span> ws.iter_cols(min_row=<span class="hljs-number">1</span>, max_col=<span class="hljs-number">3</span>, max_row=<span class="hljs-number">2</span>):<br>    <span class="hljs-keyword">for</span> cell <span class="hljs-keyword">in</span> col:<br>        <span class="hljs-built_in">print</span>(cell)<br>&lt;Cell Sheet1.A1&gt;<br>&lt;Cell Sheet1.A2&gt;<br>&lt;Cell Sheet1.B1&gt;<br>&lt;Cell Sheet1.B2&gt;<br>&lt;Cell Sheet1.C1&gt;<br>&lt;Cell Sheet1.C2&gt;<br></code></pre></td></tr></table></figure>
 
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p> 我们简单的来介绍<code>out/target/product/generic/system</code>目录下的常用目录:<br> Android系统自带的apk文件都在<code>out/target/product/generic/system/apk</code>目录下;<br> 一些可执行文件(比如C编译的执行),放在<code>out/target/product/generic/system/bin</code>目录下;<br> 动态链接库放在<code>out/target/product/generic/system/lib</code>目录下;<br> 硬件抽象层文件都放在<code>out/targer/product/generic/system/lib/hw</code>目录下.</p>
-<h1 id="SDK编译"><a href="#SDK编译" class="headerlink" title="SDK编译"></a>SDK编译</h1><p>如果你需要自己编译SDK使用,很简单,只需要执行命令<code>make sdk</code>即可。</p>
+<h1 id="遍历行或列"><a href="#遍历行或列" class="headerlink" title="遍历行或列"></a>遍历行或列</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">ws.rows<br>ws.columns<br></code></pre></td></tr></table></figure>
 
+<h1 id="遍历工作表中的值"><a href="#遍历工作表中的值" class="headerlink" title="遍历工作表中的值"></a>遍历工作表中的值</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> ws.values:<br>   <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> row:<br>     <span class="hljs-built_in">print</span>(value)<br></code></pre></td></tr></table></figure>
+
+<p><code>Worksheet.iter_rows()</code>和都<code>Worksheet.iter_cols()</code>可以采用<code>values_only</code>参数来仅返回单元格的值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> row <span class="hljs-keyword">in</span> ws.iter_rows(min_row=<span class="hljs-number">1</span>, max_col=<span class="hljs-number">3</span>, max_row=<span class="hljs-number">2</span>, values_only=<span class="hljs-literal">True</span>):<br>	<span class="hljs-built_in">print</span>(row)<br></code></pre></td></tr></table></figure>
+
+<h1 id="保存到文件"><a href="#保存到文件" class="headerlink" title="保存到文件"></a>保存到文件</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">wb = Workbook()<br>wb.save(<span class="hljs-string">&#x27;balances.xlsx&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="从文件加载"><a href="#从文件加载" class="headerlink" title="从文件加载"></a>从文件加载</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> openpyxl <span class="hljs-keyword">import</span> load_workbook<br>wb2 = load_workbook(<span class="hljs-string">&#x27;test.xlsx&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<h1 id="获取Excel总列数，总行数，获取一行所有值，获取一列所有值"><a href="#获取Excel总列数，总行数，获取一行所有值，获取一列所有值" class="headerlink" title="获取Excel总列数，总行数，获取一行所有值，获取一列所有值"></a>获取Excel总列数，总行数，获取一行所有值，获取一列所有值</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> openpyxl <span class="hljs-keyword">import</span> *<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ExcelOp</span>(<span class="hljs-title class_ inherited__">object</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, file</span>):<br>        self.file = file<br>        self.wb = load_workbook(self.file)<br>        sheets = self.wb.get_sheet_names()<br>        self.sheet = sheets[<span class="hljs-number">0</span>]<br>        self.ws = self.wb[self.sheet]<br><br>    <span class="hljs-comment"># 获取表格的总行数和总列数</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_row_clo_num</span>(<span class="hljs-params">self</span>):<br>        rows = self.ws.max_row<br>        columns = self.ws.max_column<br>        <span class="hljs-keyword">return</span> rows, columns<br><br>    <span class="hljs-comment"># 获取某个单元格的值</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_cell_value</span>(<span class="hljs-params">self, row, column</span>):<br>        cell_value = self.ws.cell(row=row, column=column).value<br>        <span class="hljs-keyword">return</span> cell_value<br><br>    <span class="hljs-comment"># 获取某列的所有值</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_col_value</span>(<span class="hljs-params">self, column</span>):<br>        rows = self.ws.max_row<br>        column_data = []<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, rows + <span class="hljs-number">1</span>):<br>            cell_value = self.ws.cell(row=i, column=column).value<br>            column_data.append(cell_value)<br>        <span class="hljs-keyword">return</span> column_data<br><br>    <span class="hljs-comment"># 获取某行所有值</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_row_value</span>(<span class="hljs-params">self, row</span>):<br>        columns = self.ws.max_column<br>        row_data = []<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, columns + <span class="hljs-number">1</span>):<br>            cell_value = self.ws.cell(row=row, column=i).value<br>            row_data.append(cell_value)<br>        <span class="hljs-keyword">return</span> row_data<br><br>    <span class="hljs-comment"># 设置某个单元格的值</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_cell_value</span>(<span class="hljs-params">self, row, colunm, cellvalue</span>):<br>        <span class="hljs-keyword">try</span>:<br>            self.ws.cell(row=row, column=colunm).value = cellvalue<br>            self.wb.save(self.file)<br>        <span class="hljs-keyword">except</span>:<br>            self.ws.cell(row=row, column=colunm).value = <span class="hljs-string">&quot;writefail&quot;</span><br>            self.wb.save(self.file)<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    excel_op = ExcelOp(file=<span class="hljs-string">&quot;cpu.xlsx&quot;</span>)<br>    first_row = excel_op.get_row_value(<span class="hljs-number">1</span>)<br>    <span class="hljs-built_in">print</span>(first_row)<br>    second_col = excel_op.get_col_value(<span class="hljs-number">2</span>)<br>    <span class="hljs-built_in">print</span>(second_col)<br></code></pre></td></tr></table></figure>
                 
               </div>
             
             <hr/>
             <div>
               <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/learn/" class="category-chain-item">learn</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
   
   
     <div class="post-meta">
@@ -386,8 +347,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Android源码编译</div>
-      <div>http://example.com/2023/01/10/Android源码编译/</div>
+      <div>openpyxl</div>
+      <div>http://example.com/2023/01/12/openpyxl/</div>
     </div>
     <div class="license-meta">
       
@@ -399,7 +360,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年1月10日</div>
+          <div>2023年1月12日</div>
         </div>
       
       
@@ -431,18 +392,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/12/openpyxl/" title="openpyxl">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">openpyxl</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/01/08/%E7%A7%AF%E7%B4%AF%E5%B0%8F%E6%8A%80%E5%B7%A7/" title="积累小技巧">
-                        <span class="hidden-mobile">积累小技巧</span>
+                      <a href="/2023/01/10/Android%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" title="Android源码编译">
+                        <span class="hidden-mobile">Android源码编译</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
