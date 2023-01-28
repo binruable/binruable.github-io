@@ -90,7 +90,11 @@
 
 
   
-<meta name="generator" content="Hexo 5.4.2"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head>
 
 
 <body>
@@ -297,28 +301,34 @@
             
               <div class="markdown-body">
                 
-                <h1 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h1><p>不再赘述</p>
-<h1 id="构建编译环境"><a href="#构建编译环境" class="headerlink" title="构建编译环境"></a>构建编译环境</h1><p>不再赘述</p>
-<h1 id="编译三部曲"><a href="#编译三部曲" class="headerlink" title="编译三部曲"></a>编译三部曲</h1><ol>
-<li><p>初始化编译环境，该命令执行成功后会引入其他脚本，比如接下来要用到的<code>lunch</code>命令。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br></code></pre></td></tr></table></figure></li>
-<li><p><code>lunch</code>指定编译目标，编译目标就是生成的镜像要运行在什么样的设备上，这里我们设置编译目标为<code>aosp_arm64-eng</code></p>
+                <h1>下载源码</h1>
+<p>不再赘述</p>
+<h1>构建编译环境</h1>
+<p>不再赘述</p>
+<h1>编译三部曲</h1>
+<ol>
+<li>
+<p>初始化编译环境，该命令执行成功后会引入其他脚本，比如接下来要用到的<code>lunch</code>命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> build/envsetup.sh<br></code></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>lunch</code>指定编译目标，编译目标就是生成的镜像要运行在什么样的设备上，这里我们设置编译目标为<code>aosp_arm64-eng</code></p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">lunch</span> aosp_arm64-eng<br></code></pre></td></tr></table></figure>
-
 <p>编译目标的格式：<strong>BUILD-BUILDTTYPE</strong>，比如<code>aosp_arm64-eng</code>的<strong>BUILD</strong>为<code>aosp_arm</code>，<strong>BUILDTTYPE</strong>为<code>eng</code></p>
 <p><em><strong>什么是BUILD</strong></em></p>
+</li>
+</ol>
 <div class="note note-success">
             <p>BUILD指的是特定功能的组合的特定名称,即表示编译出的镜像可以运行在什么环境.其中,aosp(Android Open Source Project)代表Android开源项目;arm表示系统是运行在arm架构的处理器上,arm64则是指64位arm架构。</p>
           </div>
-
-
 <p><em><strong>什么是BUILDTYPE</strong></em></p>
-<div class="note note-success">
+   <div class="note note-success">
             <p>BUILD TYPE则指的是编译类型,通常有三种:<br>user: 代表这是编译出的系统镜像是可以用来正式发布到市场的版本,其权限是被限制的(如,没有root、debug权限）。<br>userdebug: 在user版本的基础上开放了root权限和debug权限。<br>eng: 代表engineer,也就是所谓的开发工程师的版本,拥有最大的权限(root等),此外还附带了许多debug工具。</p>
-          </div></li>
-<li><p>通过make指令进行代码编译,该指令通过<code>-j</code>参数来设置参与编译的线程数量,以提高编译速度.比如这里我们设置8个线程同时编译:</p>
+          </div>
+<ol start="3">
+<li>
+<p>通过make指令进行代码编译,该指令通过<code>-j</code>参数来设置参与编译的线程数量,以提高编译速度.比如这里我们设置8个线程同时编译:</p>
 <figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gauss"><span class="hljs-built_in">make</span> -j8<br></code></pre></td></tr></table></figure>
-
 <p>需要注意的是,参与编译的线程并不是越多越好,通常是根据你机器cup总逻辑核数来确定</p>
 <p>输入top命令，然后按1，可以查看CPU所有逻辑核的负载。</p>
 <p>逻辑cpu=CPU个数×每颗核数  当他相等的时候说明没有使用超线程</p>
@@ -327,20 +337,24 @@
 <p><code>cat /proc/cpuinfo | grep &quot;physical id&quot; | uniq | wc -l</code>   查看机器一共几个cpu</p>
 </li>
 </ol>
-<h1 id="模块编译"><a href="#模块编译" class="headerlink" title="模块编译"></a>模块编译</h1><p>除了通过make命令编译整个android源码外，Google也为我们提供了相应的命令来支持单独模块的编译。</p>
+<h1>模块编译</h1>
+<p>除了通过make命令编译整个android源码外，Google也为我们提供了相应的命令来支持单独模块的编译。</p>
 <p>编译环境初始化(即执行<code>source build/envsetup.sh</code>)之后,我们可以得到一些有用的指令,除了上边用到的<code>lunch</code>,还有以下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">- croot: Changes directory to the top of the tree.<br>- m: Makes from the top of the tree.<br>- mm: Builds all of the modules <span class="hljs-keyword">in</span> the current directory.<br>- mmm: Builds all of the modules <span class="hljs-keyword">in</span> the supplied directories.<br>- cgrep: Greps on all <span class="hljs-built_in">local</span> C/C++ files.<br>- jgrep: Greps on all <span class="hljs-built_in">local</span> Java files.<br>- resgrep: Greps on all <span class="hljs-built_in">local</span> res/*.xml files.<br>- godir: Go to the directory containing a file.<br></code></pre></td></tr></table></figure>
-
 <p>其中mmm指令就是用来编译指定目录。通常来说，每个目录只包含一个模块。比如这里我们要编译Launcher2模块，执行指令：</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs makefile">mmm packages/apps/Launcher2/<br></code></pre></td></tr></table></figure>
-
 <p>编译完成后，可以在<code>out/target/product/gereric/system/app</code>中看到编译的Launcher2.apk文件了。</p>
 <div class="note note-success">
             <p>编译好指定模块后，借助adb install命令直接将生成的apk文件安装到设备上即可。</p>
           </div>
-
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p> 我们简单的来介绍<code>out/target/product/generic/system</code>目录下的常用目录:<br> Android系统自带的apk文件都在<code>out/target/product/generic/system/apk</code>目录下;<br> 一些可执行文件(比如C编译的执行),放在<code>out/target/product/generic/system/bin</code>目录下;<br> 动态链接库放在<code>out/target/product/generic/system/lib</code>目录下;<br> 硬件抽象层文件都放在<code>out/targer/product/generic/system/lib/hw</code>目录下.</p>
-<h1 id="SDK编译"><a href="#SDK编译" class="headerlink" title="SDK编译"></a>SDK编译</h1><p>如果你需要自己编译SDK使用,很简单,只需要执行命令<code>make sdk</code>即可。</p>
+<h1>补充</h1>
+<p>我们简单的来介绍<code>out/target/product/generic/system</code>目录下的常用目录:<br>
+Android系统自带的apk文件都在<code>out/target/product/generic/system/apk</code>目录下;<br>
+一些可执行文件(比如C编译的执行),放在<code>out/target/product/generic/system/bin</code>目录下;<br>
+动态链接库放在<code>out/target/product/generic/system/lib</code>目录下;<br>
+硬件抽象层文件都放在<code>out/targer/product/generic/system/lib/hw</code>目录下.</p>
+<h1>SDK编译</h1>
+<p>如果你需要自己编译SDK使用,很简单,只需要执行命令<code>make sdk</code>即可。</p>
 
                 
               </div>
