@@ -4,25 +4,6 @@
   
   
   <entry>
-    <title>算法</title>
-    <link href="/2023/02/07/%E6%A2%A6%E5%BC%80%E5%A7%8B%E7%9A%84%E5%9C%B0%E6%96%B9/"/>
-    <url>/2023/02/07/%E6%A2%A6%E5%BC%80%E5%A7%8B%E7%9A%84%E5%9C%B0%E6%96%B9/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    <categories>
-      
-      <category>tips</category>
-      
-    </categories>
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>如何理解矩阵的秩</title>
     <link href="/2023/01/27/%E7%9F%A9%E9%98%B5%E7%9A%84%E7%A7%A9/"/>
     <url>/2023/01/27/%E7%9F%A9%E9%98%B5%E7%9A%84%E7%A7%A9/</url>
@@ -136,6 +117,31 @@
   
   
   <entry>
+    <title>Android</title>
+    <link href="/2023/01/08/Android/"/>
+    <url>/2023/01/08/Android/</url>
+    
+    <content type="html"><![CDATA[<h1>为什么使用Handle</h1><p>Andriod不允许在子线程中更新界面组件，因为多个子线程并发操作UI可能导致性能、线程安全问题。<br>Android制定规则：<strong>只允许在UI线程（主线程）中修改Activity里的UI组件。</strong><br>程序第一次启动时，会同时启动一条主线程，用于处理UI相关事件，如用户按键、用户触屏、屏幕绘图等，并把相关事件分发到对应的组件上进行处理。<br>那么如何让新启动的线程来动态改变界面组件的属性值？<br><strong>Android使用Handle的消息传递机制来实现。</strong></p><h1>Handle类简介</h1><p>Handle类作用：</p><ul><li><strong>让主线程“适时”的处理新启动的线程所发送的消息。（回调实现）</strong></li></ul><p>上面说法需要分成两步：</p><ol><li>新启动的线程发送消息。</li><li>主线程获取并处理消息。</li></ol><p>这里显然通过回调的方法来实现，重写Handle类中处理消息的方法：</p><ol><li>新启动的线程发送消息，发送到MessageQueue</li><li>Handle不断从MessageQueue中获取并处理消息（这里一直在回调处理消息的方法）</li></ol><p>Handle类主要方法如下：</p><ul><li><code>handleMessage(Message msg)</code>：处理消息的方法。</li><li><code>hasMessage(int what)</code>：检查队列中是否包含属性值为<code>what</code>的消息。</li><li><code>hasMessage(int what, Object object)</code>：检查队列中是否包含属性值为<code>what</code>且object属性为指定对象的消息。</li><li><code>Message obtainMessage()</code>：获取消息（多个重载）。</li><li><code>sendMessage(Message msg)</code>:立即发送消息。</li><li><code>sendMessageDelayed(Message msg, long delayMillis)</code>:指定毫秒后发送消息。</li></ul><p>借助于上述方法，程序可以很方便的借助于Handle来进行消息传递</p><h1>示例：自动播放动画</h1><p>通过一个新线程来周期性修改ImageView所显示的图片<br><img src="https://dhc.pythonanywhere.com/media/editor/demo1_20230106204937050200.gif" alt=""></p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Looper1</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AppCompatActivity</span>  &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Handler</span> <span class="hljs-variable">myhandler</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Handler</span>(Looper.getMainLooper())&#123; <span class="hljs-comment">// 新建一个Handle</span><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handleMessage</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> Message msg)</span> &#123; <span class="hljs-comment">// Handle不断从MessageQueue中获取并处理消息</span><br>            <span class="hljs-keyword">if</span>(msg.what == <span class="hljs-number">0x123</span>)&#123;<br>                donghua();<br>            &#125;<br>        &#125;<br>    &#125;;<br>...<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onCreate</span><span class="hljs-params">(Bundle savedInstanceState)</span> &#123;<br>        <span class="hljs-built_in">super</span>.onCreate(savedInstanceState);<br>        setContentView(R.layout.activity_looper);<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Timer</span>().schedule(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TimerTask</span>() &#123;  <span class="hljs-comment">// 不断循环的定时器</span><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>                myhandler.sendEmptyMessage(<span class="hljs-number">0x123</span>);  <span class="hljs-comment">// 新启动的线程发送消息到MessageQueue</span><br>            &#125;<br>        &#125;, <span class="hljs-number">0</span>, <span class="hljs-number">1000</span>);<br>    &#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>learn</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Android</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Git使用说明</title>
     <link href="/2023/01/08/Git%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/"/>
     <url>/2023/01/08/Git%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/</url>
@@ -153,31 +159,6 @@
     <tags>
       
       <tag>GIT</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Android</title>
-    <link href="/2023/01/08/Handle%E3%80%81Looper%E4%B8%8EMessageQueue/"/>
-    <url>/2023/01/08/Handle%E3%80%81Looper%E4%B8%8EMessageQueue/</url>
-    
-    <content type="html"><![CDATA[<h1>为什么使用Handle</h1><p>Andriod不允许在子线程中更新界面组件，因为多个子线程并发操作UI可能导致性能、线程安全问题。<br>Android制定规则：<strong>只允许在UI线程（主线程）中修改Activity里的UI组件。</strong><br>程序第一次启动时，会同时启动一条主线程，用于处理UI相关事件，如用户按键、用户触屏、屏幕绘图等，并把相关事件分发到对应的组件上进行处理。<br>那么如何让新启动的线程来动态改变界面组件的属性值？<br><strong>Android使用Handle的消息传递机制来实现。</strong></p><h1>Handle类简介</h1><p>Handle类作用：</p><ul><li><strong>让主线程“适时”的处理新启动的线程所发送的消息。（回调实现）</strong></li></ul><p>上面说法需要分成两步：</p><ol><li>新启动的线程发送消息。</li><li>主线程获取并处理消息。</li></ol><p>这里显然通过回调的方法来实现，重写Handle类中处理消息的方法：</p><ol><li>新启动的线程发送消息，发送到MessageQueue</li><li>Handle不断从MessageQueue中获取并处理消息（这里一直在回调处理消息的方法）</li></ol><p>Handle类主要方法如下：</p><ul><li><code>handleMessage(Message msg)</code>：处理消息的方法。</li><li><code>hasMessage(int what)</code>：检查队列中是否包含属性值为<code>what</code>的消息。</li><li><code>hasMessage(int what, Object object)</code>：检查队列中是否包含属性值为<code>what</code>且object属性为指定对象的消息。</li><li><code>Message obtainMessage()</code>：获取消息（多个重载）。</li><li><code>sendMessage(Message msg)</code>:立即发送消息。</li><li><code>sendMessageDelayed(Message msg, long delayMillis)</code>:指定毫秒后发送消息。</li></ul><p>借助于上述方法，程序可以很方便的借助于Handle来进行消息传递</p><h1>示例：自动播放动画</h1><p>通过一个新线程来周期性修改ImageView所显示的图片<br><img src="https://dhc.pythonanywhere.com/media/editor/demo1_20230106204937050200.gif" alt=""></p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Looper1</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AppCompatActivity</span>  &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Handler</span> <span class="hljs-variable">myhandler</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Handler</span>(Looper.getMainLooper())&#123; <span class="hljs-comment">// 新建一个Handle</span><br>        <span class="hljs-meta">@Override</span><br>        <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handleMessage</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> Message msg)</span> &#123; <span class="hljs-comment">// Handle不断从MessageQueue中获取并处理消息</span><br>            <span class="hljs-keyword">if</span>(msg.what == <span class="hljs-number">0x123</span>)&#123;<br>                donghua();<br>            &#125;<br>        &#125;<br>    &#125;;<br>...<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onCreate</span><span class="hljs-params">(Bundle savedInstanceState)</span> &#123;<br>        <span class="hljs-built_in">super</span>.onCreate(savedInstanceState);<br>        setContentView(R.layout.activity_looper);<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Timer</span>().schedule(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TimerTask</span>() &#123;  <span class="hljs-comment">// 不断循环的定时器</span><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>                myhandler.sendEmptyMessage(<span class="hljs-number">0x123</span>);  <span class="hljs-comment">// 新启动的线程发送消息到MessageQueue</span><br>            &#125;<br>        &#125;, <span class="hljs-number">0</span>, <span class="hljs-number">1000</span>);<br>    &#125;<br></code></pre></td></tr></table></figure>]]></content>
-    
-    
-    <categories>
-      
-      <category>learn</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>Android</tag>
       
     </tags>
     
